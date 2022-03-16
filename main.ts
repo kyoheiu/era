@@ -86,7 +86,10 @@ const COLON = [
   [0, 0, 0],
 ];
 
-const print_number = (num: number[][]) => {
+const TIME_WIDTH = 25;
+const TIME_HEIGHT = 5;
+
+const print_number = (num: number[][], indent: number) => {
   let result = "";
   num.forEach((nums) => {
     let line = "";
@@ -99,7 +102,7 @@ const print_number = (num: number[][]) => {
         line = line + " ";
       }
     });
-    result = result + line + "\n";
+    result = result + " ".repeat(indent) + line + "\n";
   });
   console.log(result);
 };
@@ -112,16 +115,21 @@ const concat_nums = (
 ): number[][] => {
   let result: number[][] = [];
   for (let i = 0; i < 5; i++) {
-    num1[i].push(0);
-    num3[i].push(0);
-    const line = num1[i].concat(num2[i], COLON[i], num3[i], num4[i]);
+    const first = [...num1[i], 0];
+    const third = [...num3[i], 0];
+    const line = first.concat(num2[i], COLON[i], third, num4[i]);
     result.push(line);
   }
   return result;
 };
 
-console.log("\x1b[?1049h");
-print_number(concat_nums(ONE, TWO, THREE, FOUR));
-setTimeout(() => {
-  console.log("\x1b[?1049l");
-}, 500);
+const { columns, rows } = Deno.consoleSize(Deno.stdout.rid);
+const start_x = Math.floor((columns - TIME_WIDTH) / 2) - 1;
+const start_y = Math.floor((rows - TIME_HEIGHT) / 2) - 1;
+// const cursor_move = "\x1b[1;" + start_y.toString() + "h";
+// console.log("\x1b[?1049h");
+// console.log(cursor_move);
+print_number(concat_nums(TWO, TWO, THREE, FOUR), start_x);
+// setTimeout(() => {
+//   console.log("\x1b[?1049l");
+// }, 1000);

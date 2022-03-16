@@ -11,6 +11,7 @@ scripts:
   start:
     cmd: main.ts
     desc: Runs main script
+    unstable: true
 
   test:
     cmd: deno test --reload
