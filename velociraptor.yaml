@@ -1,0 +1,36 @@
+allow:
+  # - write
+  # - read
+  - net
+  # - env
+
+    #envFile:
+    #- .env
+
+scripts:
+  start:
+    cmd: main.ts
+    desc: Runs main script
+
+  test:
+    cmd: deno test --reload
+    desc: Runs the tests
+
+  lint:
+    cmd: deno lint
+    desc: Runs lint
+
+  fmt:
+    cmd: deno fmt
+    desc: Runs format
+
+  cov:
+    cmd: deno coverage cov_profile
+    desc: Shows uncovered lists
+
+  ci:
+    cmd:
+      - deno lint
+      - deno fmt --check
+      - deno test --reload
+    desc: Runs lint, check format and test
