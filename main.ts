@@ -107,12 +107,7 @@ const print_number = (num: number[][], indent: number) => {
   console.log(result);
 };
 
-const concat_nums = (
-  num1: number[][],
-  num2: number[][],
-  num3: number[][],
-  num4: number[][]
-): number[][] => {
+const concat_nums = ([num1, num2, num3, num4]: number[][][]): number[][] => {
   let result: number[][] = [];
   for (let i = 0; i < 5; i++) {
     const first = [...num1[i], 0];
@@ -123,13 +118,68 @@ const concat_nums = (
   return result;
 };
 
-const { columns, rows } = Deno.consoleSize(Deno.stdout.rid);
-const start_x = Math.floor((columns - TIME_WIDTH) / 2) - 1;
-const start_y = Math.floor((rows - TIME_HEIGHT) / 2) - 1;
-// const cursor_move = "\x1b[1;" + start_y.toString() + "h";
-// console.log("\x1b[?1049h");
-// console.log(cursor_move);
-print_number(concat_nums(TWO, TWO, THREE, FOUR), start_x);
-// setTimeout(() => {
-//   console.log("\x1b[?1049l");
-// }, 1000);
+const make_time = (): number[][][] => {
+  const time = new Date();
+  const hour = time.getHours();
+  const min = time.getMinutes();
+  const first = Math.floor(hour / 10);
+  const second = hour - first * 10;
+  const third = Math.floor(min / 10);
+  const fourth = min - third * 10;
+  return [first, second, third, fourth].map((item) => num_to_arrays(item));
+};
+
+const num_to_arrays = (num: number): number[][] => {
+  switch (num) {
+    case 1:
+      return ONE;
+    case 2:
+      return TWO;
+    case 3:
+      return THREE;
+    case 4:
+      return FOUR;
+    case 5:
+      return FIVE;
+    case 6:
+      return SIX;
+    case 7:
+      return SEVEN;
+    case 8:
+      return EIGHT;
+    case 9:
+      return NINE;
+    default:
+      return ZERO;
+  }
+};
+
+const main = async () => {
+  const { columns, rows } = Deno.consoleSize(Deno.stdout.rid);
+  const start_x = Math.floor((columns - TIME_WIDTH) / 2) - 1;
+  const start_y = Math.floor((rows - TIME_HEIGHT) / 2) - 1;
+  Deno.setRaw(Deno.stdin.rid, true);
+  const c = new Uint8Array(1);
+  console.log("\x1b[?1049h"); //Enter new screen
+  console.log("\x1b[?25l"); //Hide cursor
+  console.log("\x1b[1;1f"); //Go to home position
+  for (let i = 0; i < start_y; i++) {
+    console.log();
+  }
+  print_number(concat_nums(make_time()), start_x);
+  const intervalID = setInterval(() => {
+    console.log("\x1b[1;1f"); //Go to home position
+    for (let i = 0; i < start_y; i++) {
+      console.log();
+    }
+    print_number(concat_nums(make_time()), start_x);
+  }, 5000);
+  await Deno.stdin.read(c);
+  clearInterval(intervalID);
+  console.log("\x1b[?25h"); //Show cursor
+  console.log("\x1b[?1049l");
+  Deno.setRaw(Deno.stdin.rid, false);
+  return;
+};
+
+await main();
