@@ -157,12 +157,27 @@ const num_to_arrays = (num: number): number[][] => {
 
 const call_rain = (rain: string, column: number, row: number): string => {
   const lines = rain.split(/\n/).length + 1;
-  if (lines < row) {
-    let new_rain = "│".repeat(column);
+  if (lines <= row + 1) {
+    let new_rain = "";
+    for (let i = 0; i < column; i++) {
+      new_rain = new_rain + make_drop(getRandomInt(4));
+    }
     new_rain = new_rain + "\n" + rain;
     return new_rain;
   } else {
     return rain;
+  }
+};
+
+const getRandomInt = (max: number): number => {
+  return Math.floor(Math.random() * max);
+};
+
+const make_drop = (rand: number): string => {
+  if (rand == 0) {
+    return "│";
+  } else {
+    return " ";
   }
 };
 
