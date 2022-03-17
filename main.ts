@@ -88,9 +88,10 @@ const COLON = [
 
 const TIME_WIDTH = 25;
 const TIME_HEIGHT = 5;
+const INTERVAL = 500;
 
-const print_number = (num: number[][], indent: number) => {
-  let result = "";
+const generate_string_array = (num: number[][]): string[] => {
+  const result: string[] = [];
   num.forEach((nums) => {
     let line = "";
     nums.forEach((num) => {
@@ -102,13 +103,13 @@ const print_number = (num: number[][], indent: number) => {
         line = line + " ";
       }
     });
-    result = result + " ".repeat(indent) + line + "\n";
+    result.push(line);
   });
-  console.log(result);
+  return result;
 };
 
 const concat_nums = ([num1, num2, num3, num4]: number[][][]): number[][] => {
-  let result: number[][] = [];
+  const result: number[][] = [];
   for (let i = 0; i < 5; i++) {
     const first = [...num1[i], 0];
     const third = [...num3[i], 0];
@@ -154,31 +155,50 @@ const num_to_arrays = (num: number): number[][] => {
   }
 };
 
+const call_rain = (rain: string, column: number, row: number): string => {
+  const lines = rain.split(/\n/).length + 1;
+  if (lines < row) {
+    let new_rain = "│".repeat(column);
+    new_rain = new_rain + "\n" + rain;
+    return new_rain;
+  } else {
+    return rain;
+  }
+};
+
 const main = async () => {
   const { columns, rows } = Deno.consoleSize(Deno.stdout.rid);
   const start_x = Math.floor((columns - TIME_WIDTH) / 2) - 1;
   const start_y = Math.floor((rows - TIME_HEIGHT) / 2) - 1;
-  Deno.setRaw(Deno.stdin.rid, true);
+  Deno.setRaw(Deno.stdin.rid, true); //Enter raw mode
   const c = new Uint8Array(1);
-  console.log("\x1b[?1049h"); //Enter new screen
-  console.log("\x1b[?25l"); //Hide cursor
-  console.log("\x1b[1;1f"); //Go to home position
-  for (let i = 0; i < start_y; i++) {
-    console.log();
+  await Deno.stdout.write(new TextEncoder().encode("\x1b[?1049h")); //Enter new screen
+  await Deno.stdout.write(new TextEncoder().encode("\x1b[?25l")); //Hide cursor
+  for (let i = 0; i < 5; i++) {
+    const txt = generate_string_array(concat_nums(make_time()));
+    const move =
+      "\x1b[" + (start_y + i).toString() + ";" + start_x.toString() + "f";
+    await Deno.stdout.write(new TextEncoder().encode(move)); //Go to home position
+    console.log(txt[i]);
   }
-  print_number(concat_nums(make_time()), start_x);
-  const intervalID = setInterval(() => {
-    console.log("\x1b[1;1f"); //Go to home position
-    for (let i = 0; i < start_y; i++) {
-      console.log();
+  let rain = "";
+  const intervalID = setInterval(async () => {
+    await Deno.stdout.write(new TextEncoder().encode("\x1b[1;1f")); //Go to home position
+    rain = call_rain(rain, columns, rows);
+    console.log(rain);
+    for (let i = 0; i < 5; i++) {
+      const txt = generate_string_array(concat_nums(make_time()));
+      const move =
+        "\x1b[" + (start_y + i).toString() + ";" + start_x.toString() + "f";
+      await Deno.stdout.write(new TextEncoder().encode(move)); //Go to home position
+      console.log(txt[i]);
     }
-    print_number(concat_nums(make_time()), start_x);
-  }, 5000);
+  }, INTERVAL);
   await Deno.stdin.read(c);
   clearInterval(intervalID);
-  console.log("\x1b[?25h"); //Show cursor
-  console.log("\x1b[?1049l");
-  Deno.setRaw(Deno.stdin.rid, false);
+  await Deno.stdout.write(new TextEncoder().encode("\x1b[?25h")); //Show cursor
+  await Deno.stdout.write(new TextEncoder().encode("\x1b[?1049l")); //Restore main screen
+  Deno.setRaw(Deno.stdin.rid, false); //Exit raw mode
   return;
 };
 
