@@ -15,7 +15,7 @@ Then,
 ```
 ./era
 ```
-makes config.json in your CONFIG_HOME/era/ and there appears a rainy clock.
+makes config.json in your CONFIG_HOME/era/ and you have a rainy clock.
 
 ## Customization
 `config.json` looks like this:
@@ -23,6 +23,6 @@ makes config.json in your CONFIG_HOME/era/ and there appears a rainy clock.
 {"interval":100,"frequency":40,"rain1":"│","rain2":" "}
 ```
 
-`interval` means how often the screen is updated (or, how fast the rain falls).  
-If `frequency` goes bigger, the rain drops reduces.  
-`rain1` and `rain2` are characters for rain drops. By default `rain2` is empty, so rain drops is expressed by `rain1` (|). Of course you can change the shape of rain drops!
+`interval` means how often the screen is updated (a.k.a how fast it rains). The bigger this number, The faster it rains.    
+The larger `frequency`, the fewer the raindrops.  
+`rain1` and `rain2` are characters representing raindrops. By default `rain2` is empty, so raindrops are represented by rain1 (|) only. Of course you can change the shape of raindrops!
