@@ -5,7 +5,8 @@ A rainy clock in your terminal.
 ![sample gif](gif/sample.gif)
 
 ## Usage
-First, git clone and compile it.
+First, git clone and compile it.  
+*Compilation requires Deno.*
 ```
 git clone https://github.com/kyoheiu/era
 cd era
