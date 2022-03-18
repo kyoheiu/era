@@ -155,15 +155,14 @@ const num_to_arrays = (num: number): number[][] => {
   }
 };
 
-const call_rain = (rain: string, column: number, row: number): string => {
-  const lines = rain.split(/\n/).length + 1;
-  if (lines <= row + 1) {
+const call_rain = (rain: string[], column: number, row: number): string[] => {
+  if (rain.length <= row) {
     let new_rain = "";
     for (let i = 0; i < column; i++) {
       new_rain = new_rain + make_drop(getRandomInt(4));
     }
-    new_rain = new_rain + "\n" + rain;
-    return new_rain;
+    rain = [new_rain, ...rain];
+    return rain;
   } else {
     return rain;
   }
@@ -196,16 +195,20 @@ const main = async () => {
     await Deno.stdout.write(new TextEncoder().encode(move)); //Go to home position
     console.log(txt[i]);
   }
-  let rain = "";
+  let rain: string[] = [];
   const intervalID = setInterval(async () => {
     await Deno.stdout.write(new TextEncoder().encode("\x1b[1;1f")); //Go to home position
     rain = call_rain(rain, columns, rows);
-    console.log(rain);
+    for (let i = 1; i < rain.length; i++) {
+      const move = "\x1b[" + i.toString() + ";" + "1f";
+      await Deno.stdout.write(new TextEncoder().encode(move)); //Go to each rain-start position
+      console.log(rain[i]);
+    }
     for (let i = 0; i < 5; i++) {
       const txt = generate_string_array(concat_nums(make_time()));
       const move =
         "\x1b[" + (start_y + i).toString() + ";" + start_x.toString() + "f";
-      await Deno.stdout.write(new TextEncoder().encode(move)); //Go to home position
+      await Deno.stdout.write(new TextEncoder().encode(move)); //Go to time-start position
       console.log(txt[i]);
     }
   }, INTERVAL);
