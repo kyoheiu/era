@@ -1,11 +1,11 @@
 allow:
-  # - write
-  # - read
-  - net
+  - write
+  - read
+  # - net
   - env
 
-envFile:
-  - .env
+    #envFile:
+    #- .env
 
 scripts:
   start:
