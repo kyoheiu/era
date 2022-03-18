@@ -1,7 +1,7 @@
 const ATOM1 = "█";
 const ATOM2 = "■";
 
-const TIME_WIDTH = 25;
+const TIME_WIDTH = 39;
 const TIME_HEIGHT = 5;
 
 const read_env_number = (name: string): number => {
@@ -133,12 +133,28 @@ const generate_string_array = (num: number[][]): string[] => {
   return result;
 };
 
-const concat_nums = ([num1, num2, num3, num4]: number[][][]): number[][] => {
+const concat_nums = ([
+  num1,
+  num2,
+  num3,
+  num4,
+  num5,
+  num6,
+]: number[][][]): number[][] => {
   const result: number[][] = [];
   for (let i = 0; i < 5; i++) {
     const first = [...num1[i], 0];
     const third = [...num3[i], 0];
-    const line = first.concat(num2[i], COLON[i], third, num4[i]);
+    const fifth = [...num5[i], 0];
+    const line = first.concat(
+      num2[i],
+      COLON[i],
+      third,
+      num4[i],
+      COLON[i],
+      fifth,
+      num6[i]
+    );
     result.push(line);
   }
   return result;
@@ -148,11 +164,16 @@ const make_time = (): number[][][] => {
   const time = new Date();
   const hour = time.getHours();
   const min = time.getMinutes();
+  const sec = time.getSeconds();
   const first = Math.floor(hour / 10);
   const second = hour - first * 10;
   const third = Math.floor(min / 10);
   const fourth = min - third * 10;
-  return [first, second, third, fourth].map((item) => num_to_arrays(item));
+  const fifth = Math.floor(sec / 10);
+  const sixth = sec - fifth * 10;
+  return [first, second, third, fourth, fifth, sixth].map((item) =>
+    num_to_arrays(item)
+  );
 };
 
 const num_to_arrays = (num: number): number[][] => {
@@ -217,8 +238,8 @@ const main = async () => {
   await Deno.stdout.write(new TextEncoder().encode("\x1b[?25l")); //Hide cursor
   for (let i = 0; i < 5; i++) {
     const txt = generate_string_array(concat_nums(make_time()));
-    const move = "\x1b[" + (start_y + i).toString() + ";" + start_x.toString() +
-      "f";
+    const move =
+      "\x1b[" + (start_y + i).toString() + ";" + start_x.toString() + "f";
     await Deno.stdout.write(new TextEncoder().encode(move)); //Go to home position
     console.log(txt[i]);
   }
@@ -236,8 +257,8 @@ const main = async () => {
     }
     for (let i = 0; i < 5; i++) {
       const txt = generate_string_array(concat_nums(make_time()));
-      const move = "\x1b[" + (start_y + i).toString() + ";" +
-        start_x.toString() + "f";
+      const move =
+        "\x1b[" + (start_y + i).toString() + ";" + start_x.toString() + "f";
       await Deno.stdout.write(new TextEncoder().encode(move)); //Go to time-start position
       console.log(txt[i]);
     }
