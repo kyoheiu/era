@@ -4,28 +4,42 @@ const ATOM2 = "■";
 const TIME_WIDTH = 39;
 const TIME_HEIGHT = 5;
 
-const read_env_number = (name: string): number => {
-  const env = Deno.env.get(name);
-  if (env === null) {
-    return 100;
-  } else {
-    return parseInt(env!);
-  }
+const XDG = Deno.env.get("HOME");
+const CONFIG_DIR = XDG + "/.config/era";
+const CONFIG_PATH = CONFIG_DIR + "/config.json";
+
+type Config = {
+  interval: number;
+  frequency: number;
+  rain1: string;
+  rain2: string;
 };
 
-const read_env_str = (name: string): string => {
-  const env = Deno.env.get(name);
-  if (env === null) {
-    return "│";
-  } else {
-    return env!;
-  }
+const config_example: Config = {
+  interval: 100,
+  frequency: 40,
+  rain1: "│",
+  rain2: " ",
 };
 
-const INTERVAL = read_env_number("ERA_INTERVAL");
-const FREQUENCY = read_env_number("ERA_FREQUENCY");
-const RAIN1 = read_env_str("ERA_RAIN1");
-const RAIN2 = read_env_str("ERA_RAIN2");
+const get_config = async (file_path: string): Promise<Config> => {
+  return JSON.parse(await Deno.readTextFile(file_path));
+};
+
+const make_config = async () => {
+  await Deno.mkdir(CONFIG_DIR);
+  await Deno.writeTextFile(CONFIG_PATH, JSON.stringify(config_example));
+};
+
+const config = await get_config(CONFIG_PATH).catch(async (_) => {
+  await make_config();
+  return config_example;
+});
+
+const INTERVAL = config.interval;
+const FREQUENCY = config.frequency;
+const RAIN1 = config.rain1;
+const RAIN2 = config.rain2;
 
 const ONE = [
   [0, 0, 1, 1, 0],
