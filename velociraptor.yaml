@@ -2,10 +2,10 @@ allow:
   # - write
   # - read
   - net
-  # - env
+  - env
 
-    #envFile:
-    #- .env
+envFile:
+  - .env
 
 scripts:
   start:
