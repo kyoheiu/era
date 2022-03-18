@@ -1,21 +1,21 @@
 # era
 v0.1.0  
-A clock with rain.
+A rainy clock.
 
 ![sample gif](gif/sample.gif)
 
 ## Usage
-First, git clone and install era.
+First, git clone and compile it.
 ```
 git clone https://github.com/kyoheiu/era
 cd era
-deno compile --allow-read --allow-write --allow-env main.ts
+make
 ```
 Then,
 ```
 ./era
 ```
-makes config.json in your CONFIG_HOME/era/ and you have a rainy clock.
+creates `config.json` in your `CONFIG_HOME/era/` and you have a rainy clock.
 
 ## Customization
 `config.json` looks like this:
