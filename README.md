@@ -1,6 +1,6 @@
 # era
 v0.1.0  
-A rainy clock.
+A rainy clock in your terminal.
 
 ![sample gif](gif/sample.gif)
 
@@ -25,4 +25,4 @@ creates `config.json` in your `CONFIG_HOME/era/` and you have a rainy clock.
 
 `interval` means how often the screen is updated (a.k.a how fast it rains). The bigger this number, The faster it rains.    
 The larger `frequency`, the fewer the raindrops.  
-`rain1` and `rain2` are characters representing raindrops. By default `rain2` is empty, so raindrops are represented by rain1 (|) only. Of course you can change the shape of raindrops!
+`rain1` and `rain2` are characters representing raindrops. By default `rain2` is just a whitespace, so raindrops are represented by rain1 (|) only. Of course you can change the shape of raindrops!
