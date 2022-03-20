@@ -31,7 +31,7 @@ To exit, press any key.
 `config.json` looks like this:
 
 ```
-{"interval":100,"frequency":40,"rain1":"│","rain2":" "}
+{"interval":100,"frequency":40,"rain1":"│","rain2":" ","raincolor":"#e0b0ff"}
 ```
 
 `interval` means how often the screen is updated (a.k.a how fast it rains). The bigger this number, The faster it rains.  
