@@ -7,6 +7,7 @@ export type Config = {
   frequency: number;
   rain1: string;
   rain2: string;
+  raincolor: string;
 };
 
 export const config_example: Config = {
@@ -14,6 +15,7 @@ export const config_example: Config = {
   frequency: 40,
   rain1: "│",
   rain2: " ",
+  raincolor: "#7b68ee",
 };
 
 export const get_config = async (file_path: string): Promise<Config> => {
