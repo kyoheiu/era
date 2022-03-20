@@ -3,7 +3,7 @@
 v0.1.0  
 A rainy clock in your terminal, written with Deno.
 
-![sample gif](gif/sample.gif)
+![sample gif](screenshots/sample.gif)
 
 ## Usage
 
@@ -37,7 +37,3 @@ To exit, press any key.
 `interval` means how often the screen is updated (a.k.a how fast it rains). The bigger this number, The faster it rains.  
 The larger `frequency`, the fewer the raindrops.  
 `rain1` and `rain2` are characters representing raindrops. By default `rain2` is just a whitespace, so raindrops are represented by rain1 (|) only. Of course you can change the shape of raindrops!
-
-![sample 1](gif/sample1.png)
-
-![sample 2](gif/sample2.png)

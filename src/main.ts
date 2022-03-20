@@ -40,7 +40,7 @@ const main = async () => {
       }
       const move = "\x1b[" + i.toString() + ";" + "1f";
       await Deno.stdout.write(new TextEncoder().encode(move)); //Go to each rain-start position
-      console.log(rain[i]);
+      console.log("%c" + rain[i], "color: #e0b0ff");
     }
     for (let i = 0; i < 5; i++) {
       const txt = generate_string_array(concat_nums(make_time()));
