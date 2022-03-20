@@ -21,6 +21,10 @@ export const get_config = async (file_path: string): Promise<Config> => {
 };
 
 export const make_config = async () => {
-  await Deno.mkdir(CONFIG_DIR);
+  try {
+    await Deno.stat(CONFIG_DIR);
+  } catch (_error) {
+    await Deno.mkdir(CONFIG_DIR).catch();
+  }
   await Deno.writeTextFile(CONFIG_PATH, JSON.stringify(config_example));
 };
