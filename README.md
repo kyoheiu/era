@@ -1,7 +1,7 @@
 # era
 
 v0.1.0  
-A rainy clock in your terminal.
+A rainy clock in your terminal, written with Deno.
 
 ![sample gif](gif/sample.gif)
 
