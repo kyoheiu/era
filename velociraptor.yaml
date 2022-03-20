@@ -9,7 +9,7 @@ allow:
 
 scripts:
   start:
-    cmd: main.ts
+    cmd: src/main.ts
     desc: Runs main script
     unstable: true
 
