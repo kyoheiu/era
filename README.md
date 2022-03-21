@@ -34,6 +34,6 @@ To exit, press any key.
 {"interval":100,"frequency":40,"rain1":"│","rain2":" ","raincolor":"#e0b0ff"}
 ```
 
-`interval` means how often the screen is updated (a.k.a how fast it rains). The bigger this number, The faster it rains.  
+`interval` means how often the screen is updated (a.k.a how fast it rains). The bigger this number, The slower it rains.  
 The larger `frequency`, the fewer the raindrops.  
 `rain1` and `rain2` are characters representing raindrops. By default `rain2` is just a whitespace, so raindrops are represented by rain1 (|) only. Of course you can change the shape of raindrops!
