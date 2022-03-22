@@ -7,6 +7,7 @@ export type Config = {
   frequency: number;
   rain1: string;
   rain2: string;
+  timecolor: string;
   raincolor: string;
 };
 
@@ -15,6 +16,7 @@ export const config_example: Config = {
   frequency: 40,
   rain1: "│",
   rain2: " ",
+  timecolor: "#eeeeee",
   raincolor: "#e0b0ff",
 };
 
