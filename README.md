@@ -22,7 +22,16 @@ Then,
 ./era
 ```
 
-creates `config.json` in your `CONFIG_HOME/era/` automatically and you have a rainy clock.
+creates `config.json` in your `CONFIG_HOME/era/` automatically and you have a rainy clock.  
+Or,
+
+```
+./era -c
+```
+
+starts counter like this.
+
+![count_sample](screenshots/count_sample.png)
 
 To exit, press any key.
 
