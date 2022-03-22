@@ -35,9 +35,9 @@ const main = async () => {
     await Deno.stdout.write(new TextEncoder().encode("\x1b[1;1f")); //Go to home position
     rain = call_rain(rain, columns, rows, config);
     for (let i = 1; i < rain.length; i++) {
-      // if (i >= start_y && i < start_y + 5) {
-      //   continue;
-      // }
+      if (i >= start_y && i < start_y + 5) {
+        continue;
+      }
       const move = "\x1b[" + i.toString() + ";" + "1f";
       await Deno.stdout.write(new TextEncoder().encode(move)); //Go to each rain-start position
       console.log("%c" + rain[i], "color: " + config.raincolor);
