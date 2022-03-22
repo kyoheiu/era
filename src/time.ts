@@ -49,11 +49,10 @@ export const concat_nums = ([
   return result;
 };
 
-export const make_time = (): number[][][] => {
-  const time = new Date();
-  const hour = time.getHours();
-  const min = time.getMinutes();
-  const sec = time.getSeconds();
+export const make_time = (d: Date): number[][][] => {
+  const hour = d.getHours();
+  const min = d.getMinutes();
+  const sec = d.getSeconds();
   const first = Math.floor(hour / 10);
   const second = hour - first * 10;
   const third = Math.floor(min / 10);
@@ -65,6 +64,20 @@ export const make_time = (): number[][][] => {
   );
 };
 
+export const make_UTCtime = (d: Date): number[][][] => {
+  const hour = d.getUTCHours();
+  const min = d.getUTCMinutes();
+  const sec = d.getUTCSeconds();
+  const first = Math.floor(hour / 10);
+  const second = hour - first * 10;
+  const third = Math.floor(min / 10);
+  const fourth = min - third * 10;
+  const fifth = Math.floor(sec / 10);
+  const sixth = sec - fifth * 10;
+  return [first, second, third, fourth, fifth, sixth].map((item) =>
+    num_to_arrays(item)
+  );
+};
 const num_to_arrays = (num: number): number[][] => {
   switch (num) {
     case 1:
