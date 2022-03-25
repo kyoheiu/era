@@ -7,13 +7,12 @@ A rainy clock in your terminal, written with Deno.
 
 ## Usage
 
-First, git clone and compile it.  
-_Compilation requires Deno._
+First, git clone and compile it (requires Deno installed). Or you can use binary from the release page.
 
 ```
 git clone https://github.com/kyoheiu/era
 cd era
-make
+make install
 ```
 
 Then,
