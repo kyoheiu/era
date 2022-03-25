@@ -1,9 +1,8 @@
-import { main } from "./clock.ts";
-import { count } from "./count.ts";
+import { run, Kind } from "./run.ts";
 
 const arg = Deno.args[0];
 if (arg === "-c") {
-  await count();
+  await run(Kind.Counter);
 } else {
-  await main();
+  await run(Kind.Clock);
 }

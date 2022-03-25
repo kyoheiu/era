@@ -7,9 +7,15 @@ import {
 import {
   generate_string_array,
   call_rain,
+  make_time,
   make_UTCtime,
   concat_nums,
 } from "./time.ts";
+
+export enum Kind {
+  Clock,
+  Counter,
+}
 
 const TIME_WIDTH = 39;
 const TIME_HEIGHT = 5;
@@ -19,9 +25,8 @@ const HIDE_CURSOR = new TextEncoder().encode("\x1b[?25l");
 const SHOW_CURSOR = new TextEncoder().encode("\x1b[?25h");
 const RESTORE_SCREEN = new TextEncoder().encode("\x1b[?1049l");
 
-export const count = async () => {
+export const run = async (kind: Kind) => {
   const start = new Date().getTime();
-
   const config = await get_config(CONFIG_PATH).catch(async (_) => {
     await make_config();
     return config_example;
@@ -38,10 +43,15 @@ export const count = async () => {
   await Deno.stdout.write(HIDE_CURSOR); //Hide cursor
 
   let rain: string[] = [];
+  let txt: string[] = [];
   const interval_rainID = setInterval(async () => {
-    const now = new Date().getTime();
-    const diff = new Date(now - start);
-    const txt = generate_string_array(concat_nums(make_UTCtime(diff)));
+    if (kind === Kind.Clock) {
+      txt = generate_string_array(concat_nums(make_time(new Date())));
+    } else {
+      const now = new Date().getTime();
+      const diff = new Date(now - start);
+      txt = generate_string_array(concat_nums(make_UTCtime(diff)));
+    }
     await Deno.stdout.write(new TextEncoder().encode("\x1b[1;1f")); //Go to home position
     rain = call_rain(rain, columns, rows, config);
     for (let i = 1; i < rain.length; i++) {
