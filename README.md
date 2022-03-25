@@ -5,9 +5,9 @@ A rainy clock in your terminal, written with Deno.
 
 ![sample gif](screenshots/sample.gif)
 
-## Usage
+## Installation
 
-First, git clone and compile it (requires Deno installed). Or you can use binary from the release page.
+- git clone this repo and compile it.
 
 ```
 git clone https://github.com/kyoheiu/era
@@ -15,13 +15,15 @@ cd era
 make install
 ```
 
-Then,
+- Or, you can use binary from the release page.
+
+## Usage
 
 ```
 ./era
 ```
 
-creates `config.json` in your `CONFIG_HOME/era/` automatically and you have a rainy clock.  
+creates `config.json` in your `$XDG_CONFIG_HOME/era/` automatically and you have a rainy clock.  
 Or,
 
 ```
