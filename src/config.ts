@@ -21,7 +21,14 @@ export const config_example: Config = {
 };
 
 export const get_config = async (file_path: string): Promise<Config> => {
-  return JSON.parse(await Deno.readTextFile(file_path));
+  const j = JSON.parse(await Deno.readTextFile(file_path));
+  if (j.rain1 === "") {
+    j.rain1 = " ";
+  }
+  if (j.rain2 === "") {
+    j.rain2 = " ";
+  }
+  return j;
 };
 
 export const make_config = async () => {
