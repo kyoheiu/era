@@ -24,6 +24,9 @@ make install
 ```
 
 creates `config.json` in your `$XDG_CONFIG_HOME/era/` automatically and you have a rainy clock.
+
+NOTE: `era` assumes the value is `~/.config` if `$XDG_CONFIG_HOME` isn't defined as an environment variable.
+
 Or,
 
 ```
