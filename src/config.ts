@@ -1,5 +1,5 @@
-const XDG = Deno.env.get("HOME");
-const CONFIG_DIR = XDG + "/.config/era";
+const XDG_CONFIG_HOME = Deno.env.get("XDG_CONFIG_HOME") || Deno.env.get("HOME") + "/.config";
+const CONFIG_DIR = XDG_CONFIG_HOME + "/era";
 export const CONFIG_PATH = CONFIG_DIR + "/config.json";
 
 export type Config = {
