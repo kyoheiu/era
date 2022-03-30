@@ -35,7 +35,7 @@ export const make_config = async () => {
   try {
     await Deno.stat(CONFIG_DIR);
   } catch (_error) {
-    await Deno.mkdir(CONFIG_DIR).catch();
+    await Deno.mkdir(CONFIG_DIR, { recursive: true }).catch();
   }
   await Deno.writeTextFile(CONFIG_PATH, JSON.stringify(config_example));
 };
