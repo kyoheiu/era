@@ -1,6 +1,6 @@
 # era
 
-v0.1.0  
+v0.1.0
 A rainy clock in your terminal, written with Deno.
 
 ![sample gif](screenshots/sample.gif)
@@ -23,7 +23,10 @@ make install
 ./era
 ```
 
-creates `config.json` in your `$XDG_CONFIG_HOME/era/` automatically and you have a rainy clock.  
+creates `config.json` in your `$XDG_CONFIG_HOME/era/` automatically and you have a rainy clock.
+
+NOTE: `era` assumes the value is `~/.config` if `$XDG_CONFIG_HOME` isn't defined as an environment variable.
+
 Or,
 
 ```
@@ -44,6 +47,6 @@ To exit, press any key.
 {"interval":100,"frequency":40,"rain1":"│","rain2":" ","timecolor":"#eeeeee","raincolor":"#e0b0ff"}
 ```
 
-`interval` means how often the screen is updated (a.k.a how fast it rains). The bigger this number, The slower it rains.  
-The larger `frequency`, the fewer the raindrops.  
+`interval` means how often the screen is updated (a.k.a how fast it rains). The bigger this number, The slower it rains.
+The larger `frequency`, the fewer the raindrops.
 `rain1` and `rain2` are characters representing raindrops. By default `rain2` is just a whitespace, so raindrops are represented by rain1 (|) only. Of course you can change the shape of raindrops!
