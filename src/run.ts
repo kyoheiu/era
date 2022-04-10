@@ -144,6 +144,9 @@ export const run = async (kind: Kind) => {
 
     Deno.stdout.writeSync(GOTO_ORIGIN); //Go to home position
 
+    // Must not contains the last row because a terminal spawns scroll and the
+    // terminal window flickers when "console.log()", which prints newline, is
+    // called on the row. It makes sense if the row expresses the ground.
     for (let i = 1; i < term.height(); i++) {
       // Must overwrite with spaces until line ends even if the line content's
       // length is shorter than the terminal line length because some old
