@@ -36,8 +36,8 @@ class TimerPoint implements Point<number> {
   private start_y: number;
 
   constructor(lines: number, columns: number) {
-    this.start_x = Math.floor(saturating_sub(columns, TIME_WIDTH) / 2);
-    this.start_y = Math.floor(saturating_sub(lines, TIME_HEIGHT) / 2);
+    this.start_x = Math.floor(saturating_sub(columns, TIME_WIDTH) / 2) + 1;
+    this.start_y = Math.floor(saturating_sub(lines, TIME_HEIGHT) / 2) + 1;
   }
 
   x = (): number => {
