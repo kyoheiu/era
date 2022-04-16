@@ -2,7 +2,6 @@ import {
   get_config,
   make_config,
   config_example,
-  Config,
   CONFIG_PATH,
 } from "./config.ts";
 import {
@@ -16,86 +15,6 @@ import {
 export enum Kind {
   Clock,
   Counter,
-}
-
-// 2D dimention.
-interface Dimention<Type> {
-  width(): Type;
-  height(): Type;
-}
-
-// A point in 2D dimention.
-interface Point<Type> {
-  x(): Type;
-  y(): Type;
-}
-
-// A origin point to render time.
-class TimerPoint implements Point<number> {
-  private start_x: number;
-  private start_y: number;
-
-  constructor(lines: number, columns: number) {
-    this.start_x = Math.floor(saturating_sub(columns, TIME_WIDTH) / 2) + 1;
-    this.start_y = Math.floor(saturating_sub(lines, TIME_HEIGHT) / 2) + 1;
-  }
-
-  x = (): number => {
-    return this.start_x;
-  };
-
-  y = (): number => {
-    return this.start_y;
-  };
-}
-
-// A terminal window.
-class TermWindow implements Dimention<number>, Point<number> {
-  private lines: number;
-  private columns: number;
-  private point: Point<number>;
-
-  constructor(lines: number, columns: number) {
-    this.lines = lines;
-    this.columns = columns;
-    this.point = new TimerPoint(lines, columns);
-  }
-
-  width = (): number => {
-    return this.columns;
-  };
-
-  height = (): number => {
-    return this.lines;
-  };
-
-  x = (): number => {
-    return this.point.x();
-  };
-
-  y = (): number => {
-    return this.point.y();
-  };
-
-  // Create a terminal window for a console.
-  static make_window = (rid: number): TermWindow => {
-    const { columns, rows } = Deno.consoleSize(rid);
-
-    return new TermWindow(rows, columns);
-  };
-}
-
-class Rain {
-  private buffer: string[] = [];
-
-  raindrops = () => {
-    return this.buffer;
-  };
-
-  // Update the internal rain buffer.
-  fall = (grid: Dimention<number>, config: Config) => {
-    this.buffer = call_rain(this.buffer, grid.width(), grid.height(), config);
-  };
 }
 
 // If the result of subtraction is lesser than 0, then returns 0, otherwise
@@ -124,10 +43,18 @@ export const run = async (kind: Kind) => {
     return config_example;
   });
 
-  const rid = Deno.stdout.rid;
-  let term = TermWindow.make_window(rid);
+  // Return a timer origin point in a window.
+  const timer_point = (rows: number, columns: number) => {
+    const start_x = Math.floor(saturating_sub(columns, TIME_WIDTH) / 2) + 1;
+    const start_y = Math.floor(saturating_sub(rows, TIME_HEIGHT) / 2) + 1;
 
-  const rain = new Rain();
+    return { start_x, start_y };
+  };
+
+  let { columns, rows } = Deno.consoleSize(Deno.stdout.rid);
+  let { start_x, start_y } = timer_point(rows, columns);
+
+  let rain: string[] = [];
 
   const render = () => {
     const txt = (() => {
@@ -140,27 +67,27 @@ export const run = async (kind: Kind) => {
       }
     })();
 
-    rain.fall(term, config);
+    rain = call_rain(rain, columns, rows, config);
 
     Deno.stdout.writeSync(GOTO_ORIGIN); //Go to home position
 
     // Must not contains the last row because a terminal spawns scroll and the
     // terminal window flickers when "console.log()", which prints newline, is
     // called on the row. It makes sense if the row expresses the ground.
-    for (let i = 1; i < term.height(); i++) {
+    for (let i = 1; i < rows; i++) {
       // Must overwrite with spaces until line ends even if the line content's
       // length is shorter than the terminal line length because some old
       // contents may remain on a terminal grid when the terminal window size
       // is changed.
-      if (i >= term.y() && i < term.y() + TIME_HEIGHT) {
-        const s = (" ".repeat(saturating_sub(term.x(), 1)) + txt[i - term.y()])
-          .padEnd(term.width(), " ")
-          .slice(0, term.width());
+      if (i >= start_y && i < start_y + TIME_HEIGHT) {
+        const s = (" ".repeat(saturating_sub(start_x, 1)) + txt[i - start_y])
+          .padEnd(columns, " ")
+          .slice(0, columns);
         console.log("%c" + s, "color: " + config.timecolor);
-      } else if (i < rain.raindrops().length) {
-        const s = rain.raindrops()[i]
-          .padEnd(term.width(), " ")
-          .slice(0, term.width());
+      } else if (i < rain.length) {
+        const s = rain[i]
+          .padEnd(columns, " ")
+          .slice(0, columns);
         console.log("%c" + s, "color: " + config.raincolor);
       } else {
         console.log();
@@ -179,15 +106,15 @@ export const run = async (kind: Kind) => {
   // https://github.com/denoland/deno/issues/9995
   if (Deno.build.os !== "windows") {
     Deno.addSignalListener("SIGWINCH", () => {
-      const old_height = term.height();
+      const old_rows = rows;
 
-      // Create a terminal window for the resized window.
-      term = TermWindow.make_window(rid);
+      ({ columns, rows } = Deno.consoleSize(Deno.stdout.rid));
+      ({ start_x, start_y } = timer_point(rows, columns));
 
       // Fall new rain to keep previous raindrops surrounded the timer text.
-      const n = Math.floor(saturating_sub(term.height(), old_height) / 2);
+      const n = Math.floor(saturating_sub(rows, old_rows) / 2);
       [...Array(n)].forEach((_) => {
-        rain.fall(term, config);
+        rain = call_rain(rain, columns, rows, config);
       });
 
       // Render contents right after the window size is changed.
