@@ -1,6 +1,8 @@
 # era
 
-v0.1.0
+## v0.1.1
+Now era can redraw contents if the terminal window size is changed.
+
 A rainy clock in your terminal, written with Deno.
 
 ![sample gif](screenshots/sample.gif)
