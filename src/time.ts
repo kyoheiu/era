@@ -110,7 +110,7 @@ export const call_rain = (
   config: Config
 ): string[] => {
   if (rain.length >= row) {
-    rain.pop();
+    rain = rain.slice(0, row);
   }
   let new_rain = "";
   for (let i = 0; i < column; i++) {
