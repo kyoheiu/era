@@ -1,4 +1,4 @@
 .env
 era
-*.tar.xz
+*.tar.gz
 .vscode

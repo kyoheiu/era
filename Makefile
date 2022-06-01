@@ -1,7 +1,7 @@
 all: install
 .PHONY: install
 
-version := 0.1.1
+version := 0.1.2
 
 install:
 	deno compile --allow-read --allow-write --allow-env --unstable --output era src/main.ts
