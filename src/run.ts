@@ -1,15 +1,15 @@
 import {
-  get_config,
-  make_config,
   config_example,
   CONFIG_PATH,
+  get_config,
+  make_config,
 } from "./config.ts";
 import {
-  generate_string_array,
   call_rain,
+  concat_nums,
+  generate_string_array,
   make_time,
   make_UTCtime,
-  concat_nums,
 } from "./time.ts";
 
 export enum Kind {
@@ -51,7 +51,7 @@ export const run = async (kind: Kind) => {
     return { start_x, start_y };
   };
 
-  let { columns, rows } = Deno.consoleSize(Deno.stdout.rid);
+  let { columns, rows } = Deno.consoleSize();
   let { start_x, start_y } = timer_point(rows, columns);
 
   let rain: string[] = [];
@@ -95,7 +95,7 @@ export const run = async (kind: Kind) => {
     }
   };
 
-  Deno.setRaw(Deno.stdin.rid, true); //Enter raw mode
+  Deno.stdin.setRaw(true); //Enter raw mode
   Deno.stdout.writeSync(NEW_SCREEN); //Enter new screen
   Deno.stdout.writeSync(HIDE_CURSOR); //Hide cursor
 
@@ -108,7 +108,7 @@ export const run = async (kind: Kind) => {
     Deno.addSignalListener("SIGWINCH", () => {
       const old_rows = rows;
 
-      ({ columns, rows } = Deno.consoleSize(Deno.stdout.rid));
+      ({ columns, rows } = Deno.consoleSize());
       ({ start_x, start_y } = timer_point(rows, columns));
 
       // Fall new rain to keep previous raindrops surrounded the timer text.
@@ -129,6 +129,6 @@ export const run = async (kind: Kind) => {
   clearInterval(interval_rainID);
   Deno.stdout.writeSync(SHOW_CURSOR); //Show cursor
   Deno.stdout.writeSync(RESTORE_SCREEN); //Restore main screen
-  Deno.setRaw(Deno.stdin.rid, false); //Exit raw mode
+  Deno.stdin.setRaw(false); //Exit raw mode
   return;
 };
