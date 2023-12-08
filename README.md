@@ -4,6 +4,14 @@ A rainy clock in your terminal, written with Deno.
 
 ![sample gif](screenshots/sample.gif)
 
+## v0.1.3
+### Fixed
+- Fix error in latest deno.
+
+## v0.1.2
+### Fixed
+- the extension of pre-build compression
+
 ## v0.1.1
 Now era can redraw contents if the terminal window size is changed.
 
